@@ -13,10 +13,20 @@ public class Instructor extends User {
     }
 
     public List<Course> getMyCreatedCourses() {
-        return myCreatedCourses;
+        return new ArrayList<>(myCreatedCourses);
     }
 
     public void setMyCreatedCourses(List<Course> myCreatedCourses) {
         this.myCreatedCourses = myCreatedCourses;
+    }
+
+    public void addCourse(Course course){
+        this.myCreatedCourses.add(course);
+        course.setInstructor(this);
+    }
+
+    public void removeCourse(Course course){
+        this.myCreatedCourses.remove(course);
+        course.setInstructor(null);
     }
 }

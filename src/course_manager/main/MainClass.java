@@ -1,7 +1,7 @@
 package course_manager.main;
 
 import course_manager.controller.AuthController;
-import course_manager.controller.Controller;
+import course_manager.controller.UserController;
 import course_manager.model.User;
 import course_manager.repository.ControllerRegistry;
 
@@ -24,14 +24,14 @@ public class MainClass {
                 case "1":
                     User newUser = authController.signup();
                     if(newUser != null){
-                        Controller controller = ControllerRegistry.getController(newUser);
+                        UserController controller = ControllerRegistry.getController(newUser);
                         controller.showMenu(newUser);
                     }
                     break;
                 case "2":
                     User user = authController.login();
                     if(user != null){
-                        Controller controller = ControllerRegistry.getController(user);
+                        UserController controller = ControllerRegistry.getController(user);
                         controller.showMenu(user);
                     }
                     break;

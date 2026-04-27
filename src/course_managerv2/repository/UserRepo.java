@@ -10,7 +10,6 @@ public class UserRepo {
     private static final Map<String, User> userStore = new HashMap<>();
     private static final Map<String, Credential> credentialStore = new HashMap<>();
 
-
     public User findUserByEmail(String email){
         return userStore.get(email);
     }

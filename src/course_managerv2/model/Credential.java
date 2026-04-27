@@ -11,4 +11,7 @@ public class Credential {
         return this.password.equals(password);
     }
 
+    public void changePassword(String oldPassword, String newPassword){
+        
+    }
 }

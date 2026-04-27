@@ -19,4 +19,5 @@ public class Student extends User{
     public void setMyEnrolledCourses(List<Course> myEnrolledCourses) {
         this.myEnrolledCourses = myEnrolledCourses;
     }
+
 }
