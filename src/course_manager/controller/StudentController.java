@@ -228,6 +228,6 @@ public class StudentController implements UserController {
     }
 
     private void openCourse(Student student){
-        System.out.println("Openning course");
+        System.out.println("Opening course");
     }
 }
