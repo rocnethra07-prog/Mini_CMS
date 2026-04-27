@@ -20,4 +20,8 @@ public class Student extends User{
         this.myEnrolledCourses = myEnrolledCourses;
     }
 
+    public void addEnrollment(Course course){
+        this.myEnrolledCourses.add(course);
+    }
+
 }
