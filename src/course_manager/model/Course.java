@@ -2,6 +2,9 @@ package course_manager.model;
 
 import course_manager.util.IdGenerator;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Course {
@@ -11,6 +14,7 @@ public class Course {
     private double price;
     private Instructor instructor;
     private Set<String> categories;
+    private List<Lesson> lessons;
 
     public Course(String title, String description, double price, Set<String> categories, Instructor instructor){
         this.title = title;
@@ -19,6 +23,7 @@ public class Course {
         this.categories = categories;
         this.id = IdGenerator.generateCourseId();
         instructor.addCourse(this);
+        this.lessons = new ArrayList<>();
     }
 
     public String getId() {
@@ -58,7 +63,7 @@ public class Course {
     }
 
     public Set<String> getCategories() {
-        return categories;
+        return new HashSet<>(categories);
     }
 
     public void setCategories(Set<String> categories) {
@@ -73,4 +78,17 @@ public class Course {
     public boolean isFree(){
         return this.price == 0.0;
     }
+
+    public List<Lesson> getLessons() {
+        return new ArrayList<>(lessons);
+    }
+
+    public void addLesson(Lesson lesson){
+        this.lessons.add(lesson);
+    }
+
+    public void deleteLesson(Lesson lesson){
+        this.lessons.remove(lesson);
+    }
+
 }

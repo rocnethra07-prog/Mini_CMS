@@ -179,8 +179,50 @@ public class CourseController {
 
 
     private void manageLessons(Course course){
-        System.out.println("Lessons management");
+        boolean back = false;
+        while(!back) {
+            System.out.println("\n Managing Lessons");
+            System.out.println("1. List Lessons");
+            System.out.println("2. Add Lesson");
+            System.out.println("3. Edit Lesson");
+            System.out.println("4. Delete Lesson");
+            System.out.println("5. Manage Resources");
+            System.out.println("0. Back");
+
+            System.out.print("Choose: ");
+            switch (sc.nextLine().trim()) {
+                case "1":
+                    listLessons(course);
+                    break;
+                case "2":
+                    addLesson(course);
+                    break;
+                case "3":
+                    editLesson(course);
+                    break;
+                case "4":
+                    deleteLesson(course);
+                    break;
+                case "5":
+                    manageResourcesMenu(course);
+                    break;
+                case "0":
+                    back = true;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
     }
+
+
+    private void listLessons(Course course){
+
+    }
+
+    private void addLesson(Course course){}
+
+    private void deleteLesson(Course course){}
 
     private void manageAssignments(Course course){
         System.out.println("Assignments management");

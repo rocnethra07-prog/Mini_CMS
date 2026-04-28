@@ -3,7 +3,7 @@ package course_managerv2.controller;
 import course_managerv2.model.Student;
 import course_managerv2.model.User;
 
-public class StudentController implements Controller {
+public class StudentController implements UserController {
 
     public void showMenu(User user) {
         Student student = (Student)user;

@@ -13,7 +13,7 @@ public class Instructor extends User {
     }
 
     public List<Course> getMyCreatedCourses() {
-        return myCreatedCourses;
+        return new ArrayList<>(myCreatedCourses);
     }
 
     public void setMyCreatedCourses(List<Course> myCreatedCourses) {
