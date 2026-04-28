@@ -1,7 +1,7 @@
-package course_managerv2.repository;
+package course_manager_v2.repository;
 
-import course_managerv2.model.User;
-import course_managerv2.model.Credential;
+import course_manager_v2.model.User;
+import course_manager_v2.model.Credential;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package course_managerv2.model;
+package course_manager_v2.model;
 
 public class Course {
     private String id;

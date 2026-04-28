@@ -1,8 +1,8 @@
-package course_managerv2.model;
+package course_manager_v2.model;
 
-import course_managerv2.util.IdGenerator;
+import course_manager_v2.util.IdGenerator;
 
-public class User {
+public abstract class User {
     private final String id;
     private String name;
     private String email;
@@ -23,24 +23,9 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
+    public abstract void showMenu();
 }

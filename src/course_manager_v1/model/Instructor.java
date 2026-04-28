@@ -1,4 +1,4 @@
-package course_managerv2.model;
+package course_manager_v1.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,4 @@ public class Instructor extends User {
         return new ArrayList<>(myCreatedCourses);
     }
 
-    public void setMyCreatedCourses(List<Course> myCreatedCourses) {
-        this.myCreatedCourses = myCreatedCourses;
-    }
 }

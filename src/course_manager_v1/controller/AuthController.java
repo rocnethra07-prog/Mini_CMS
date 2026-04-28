@@ -1,8 +1,9 @@
-package course_managerv2.controller;
+package course_manager_v1.controller;
 
-import course_managerv2.model.User;
-import course_managerv2.service.AuthService;
-import course_managerv2.util.Validator;
+import course_manager_v1.model.Role;
+import course_manager_v1.model.User;
+import course_manager_v1.service.AuthService;
+import course_manager_v1.util.Validator;
 
 import java.util.Scanner;
 
@@ -46,7 +47,7 @@ public class AuthController {
             System.out.println("Password must be at least 6 characters. ");
         }
 
-        int choice;
+        Role role;
         while (true){
             System.out.println("\nChoose Role: ");
             System.out.println("1. Student");
@@ -54,14 +55,18 @@ public class AuthController {
 
             System.out.print("Enter choice: ");
             String choiceStr = sc.nextLine().trim();
-            if(choiceStr.equalsIgnoreCase("1") || choiceStr.equalsIgnoreCase("2")){
-                choice = Integer.parseInt(choiceStr);
+            if(choiceStr.equals("1")){
+                role = Role.STUDENT;
+                break;
+            }
+            else if(choiceStr.equals("2")){
+                role = Role.INSTRUCTOR;
                 break;
             }
             System.out.println("Invalid choice. Please enter 1 or 2");
         }
 
-        User user = authService.signup(name, email,password, choice);
+        User user = authService.signup(name, email,password, role);
 
         System.out.println("Signup successful! Welcome "+ user.getName());
         return user;

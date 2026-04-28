@@ -3,7 +3,6 @@ package course_manager.controller;
 import course_manager.model.Course;
 import course_manager.model.Instructor;
 import course_manager.service.CourseService;
-import course_manager.service.InstructorService;
 import course_manager.util.Validator;
 
 import java.util.HashSet;
@@ -198,13 +197,13 @@ public class CourseController {
                     addLesson(course);
                     break;
                 case "3":
-                    editLesson(course);
+//                    editLesson(course);
                     break;
                 case "4":
                     deleteLesson(course);
                     break;
                 case "5":
-                    manageResourcesMenu(course);
+//                    manageResourcesMenu(course);
                     break;
                 case "0":
                     back = true;

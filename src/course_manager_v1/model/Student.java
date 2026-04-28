@@ -1,4 +1,4 @@
-package course_managerv2.model;
+package course_manager_v1.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,5 @@ public class Student extends User{
 
     public List<Course> getMyEnrolledCourses() {
         return new ArrayList<>(myEnrolledCourses);
-    }
-
-    public void setMyEnrolledCourses(List<Course> myEnrolledCourses) {
-        this.myEnrolledCourses = myEnrolledCourses;
     }
 }
