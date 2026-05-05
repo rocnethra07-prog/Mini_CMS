@@ -16,10 +16,6 @@ public class Instructor extends User {
         return new ArrayList<>(myCreatedCourses);
     }
 
-    public void setMyCreatedCourses(List<Course> myCreatedCourses) {
-        this.myCreatedCourses = myCreatedCourses;
-    }
-
     public void addCourse(Course course){
         this.myCreatedCourses.add(course);
         course.setInstructor(this);

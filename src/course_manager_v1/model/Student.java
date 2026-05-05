@@ -13,6 +13,12 @@ public class Student extends User{
     }
 
     public List<Course> getMyEnrolledCourses() {
-        return new ArrayList<>(myEnrolledCourses);
+        return myEnrolledCourses;
+    }
+
+    public void addEnrollment(Course course){
+        if(!this.myEnrolledCourses.contains(course)){
+            this.myEnrolledCourses.add(course);
+        }
     }
 }

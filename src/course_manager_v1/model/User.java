@@ -27,4 +27,7 @@ public  class User {
         return name;
     }
 
+    public Role getRole(){
+        return role;
+    }
 }
