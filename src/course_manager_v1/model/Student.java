@@ -5,20 +5,20 @@ import java.util.List;
 
 public class Student extends User{
 
-    private List<Course> myEnrolledCourses;
+    private List<Enrollment> enrollmentList;
 
-    public Student(String name, String email){
+    public Student(String name, String email) {
         super(name, email, Role.STUDENT);
-        this.myEnrolledCourses = new ArrayList<>();
+        this.enrollmentList = new ArrayList<>();
     }
 
-    public List<Course> getMyEnrolledCourses() {
-        return myEnrolledCourses;
+    public List<Enrollment> getMyEnrollments(){
+        return enrollmentList;
     }
 
-    public void addEnrollment(Course course){
-        if(!this.myEnrolledCourses.contains(course)){
-            this.myEnrolledCourses.add(course);
+    public void addEnrollment(Enrollment enrollment){
+        if(!this.enrollmentList.contains(enrollment)){
+            this.enrollmentList.add(enrollment);
         }
     }
 }

@@ -27,14 +27,8 @@ public class CourseService {
     }
 
     public List<Lesson> getLessonsOfCourse(Course course){
-        return new ArrayList<>(course.getLessons());
+        return course.getLessons();
     }
-
-//    public Lesson addLesson(Course course, String title, String content, List<Resource> resources){
-//        Lesson lesson = new Lesson(title, content, resources);
-//        course.addLesson(lesson);
-//        return lesson;
-//    }
 
     public void addLesson(Course course, String title, String content, List<Resource> resources){
         Lesson lesson = new Lesson(title, content, resources);
@@ -70,7 +64,7 @@ public class CourseService {
     }
 
     public List<Resource> getResourceList(Lesson lesson){
-        return new ArrayList<>(lesson.getResourceList());
+        return lesson.getResourceList();
     }
 
     public void addResourceToLesson(Lesson lesson, String url, ResourceType type){
@@ -91,4 +85,35 @@ public class CourseService {
                 .orElse(null);
     }
 
+    public List<Assignment> getAssignments(Course course){
+        return course.getAssignments();
+    }
+
+    public Assignment addAssignment(Course course, String title){
+        Assignment newAssignment = new Assignment(title);
+        course.addAssignment(newAssignment);
+        return newAssignment;
+    }
+
+    public boolean isDuplicateQuestion(Assignment assignment, String questionText){
+        return assignment.getQuestionsList().stream().anyMatch(q -> q.getQuestionText().equalsIgnoreCase(questionText));
+    }
+
+    public void createAndAddQuestion(Assignment assignment, String text, List<String> options, int correctIndex, int mark){
+        assignment.addQuestion(new Question(text, options, correctIndex, mark));
+    }
+
+    public boolean removeAssignment(Course course, String assignmentId){
+        Assignment assignment = getAssignmentById(course,assignmentId);
+        if(assignment == null) return false;
+        return course.removeAssignment(assignment);
+    }
+
+    public Assignment getAssignmentById(Course course, String id){
+        return course.getAssignments()
+                .stream()
+                .filter(a -> a.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
 }

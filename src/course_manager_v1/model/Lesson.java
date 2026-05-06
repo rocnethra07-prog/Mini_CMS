@@ -34,7 +34,7 @@ public class Lesson {
     }
 
     public List<Resource> getResourceList() {
-        return resources;
+        return new ArrayList<>(resources);
     }
 
     public void addResource(Resource r){

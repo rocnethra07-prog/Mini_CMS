@@ -12,6 +12,7 @@ public class Course {
     private Instructor instructor;
     private Set<String> categories;
     private List<Lesson> lessons;
+    private List<Assignment> assignments;
 
     public Course(String title, String description, double price, Set<String> categories, Instructor instructor){
         this.title = title;
@@ -21,6 +22,7 @@ public class Course {
         this.id = IdGenerator.generateCourseId();
         instructor.addCourse(this);
         this.lessons = new ArrayList<>();
+        this.assignments = new ArrayList<>();
     }
 
     public String getId() {
@@ -77,7 +79,7 @@ public class Course {
     }
 
     public List<Lesson> getLessons() {
-        return lessons;
+        return new ArrayList<>(lessons);
     }
 
     public void addLesson(Lesson lesson){
@@ -86,6 +88,14 @@ public class Course {
 
     public void deleteLesson(Lesson lesson){
         this.lessons.remove(lesson);
+    }
+
+    public List<Assignment> getAssignments(){
+        return new ArrayList<>(assignments);
+    }
+
+    public void addAssignment(Assignment assignment){
+        this.assignments.add(assignment);
     }
 
     @Override
@@ -97,5 +107,9 @@ public class Course {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public boolean removeAssignment(Assignment assignment) {
+        return this.assignments.remove(assignment);
     }
 }

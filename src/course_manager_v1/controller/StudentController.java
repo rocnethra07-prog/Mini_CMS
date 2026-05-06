@@ -35,7 +35,7 @@ public class StudentController implements UserController<Student>{
                     enrollCourse(student);
                     break;
                 case "4":
-                    openCourse(student);
+                    new CourseProgressController().start(student);
                     break;
                 case "5":
                     viewEnrolledCourses(student);
@@ -223,35 +223,6 @@ public class StudentController implements UserController<Student>{
         else {
             System.out.println("You are already enrolled in this course.");
         }
-    }
-
-    private void openCourse(Student student){
-        System.out.println("\n--- My Enrolled Courses ---");
-        List<Course> enrolled = studentService.getEnrolledCourses(student);
-
-        if(enrolled.isEmpty()){
-            System.out.println("You are not enrolled in any course");
-            return;
-        }
-
-        for (Course c : enrolled) {
-            System.out.println(c);
-        }
-
-        System.out.print("Enter Course ID: ");
-        String id = sc.nextLine();
-
-        Course course = enrolled.stream()
-                .filter(c -> c.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-
-        if (course == null) {
-            System.out.println("Invalid ID");
-            return;
-        }
-
-
     }
 
 }

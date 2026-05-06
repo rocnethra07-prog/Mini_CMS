@@ -47,9 +47,4 @@ public class CourseRepo {
                 .filter(course ->  course.getPrice() <= price).toList();
     }
 
-    public List<Course> getEnrollableCourses(Student student){
-        return courses.stream()
-                .filter(course -> !student.getMyEnrolledCourses().contains(course))
-                .toList();
-    }
 }

@@ -5,6 +5,7 @@ public class IdGenerator {
     private static int course = 1;
     private static int lesson = 1;
     private static int resource = 1;
+    private static int assignment = 1;
 
     public static String generateUserId(){
         return "USR-" +user++;
@@ -17,5 +18,8 @@ public class IdGenerator {
     }
     public static String generateResourceId(){
         return "RES-" + resource++;
+    }
+    public static String generateAssignmentId(){
+        return "ASS-" + assignment++;
     }
 }
