@@ -5,17 +5,16 @@ import course_manager_v1.model.Lesson;
 import course_manager_v1.model.Resource;
 import course_manager_v1.model.Student;
 import course_manager_v1.service.StudentService;
-import course_manager_v1.util.ResourceOpener;
+import course_manager_v1.util.InputUtil;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class CourseProgressController {
 
-    private final Scanner sc = new Scanner(System.in);
     private final StudentService studentService = new StudentService();
 
-    public void start(Student student) {
+    public void start(Student student, Scanner sc) {
         System.out.println("\n--- My Enrolled Courses ---");
         List<Course> enrolled = studentService.getEnrolledCourses(student);
 
@@ -28,8 +27,9 @@ public class CourseProgressController {
             System.out.println(c);
         }
 
-        System.out.print("Enter Course ID: ");
-        String id = sc.nextLine().trim();
+        String id = InputUtil.getNonEmptyInput(
+                sc, "Enter Course ID : ", "Course ID cannot be empty."
+        );
 
         Course course = enrolled.stream()
                 .filter(c -> c.getId().equals(id))
@@ -41,10 +41,10 @@ public class CourseProgressController {
             return;
         }
 
-        openCourseMenu(student, course);
+        openCourseMenu(student, course, sc);
     }
 
-    private void openCourseMenu(Student student, Course course) {
+    private void openCourseMenu(Student student, Course course, Scanner sc) {
 
         boolean back = false;
         while (!back) {
@@ -58,10 +58,10 @@ public class CourseProgressController {
 
             switch (sc.nextLine().trim()) {
                 case "1":
-                    openLessons(student, course);
+                    openLessons(student, course, sc);
                     break;
                 case "2":
-                    System.out.println("Assignments module not implemented yet.");
+                    openAssignments(student, course, sc);
                     break;
                 case "3":
 //                    showProgress(student, course);
@@ -77,7 +77,7 @@ public class CourseProgressController {
     }
 
 
-    private void openLessons(Student student, Course course){
+    private void openLessons(Student student, Course course, Scanner sc){
         List<Lesson> lessonList = studentService.getLessons(course);
         if(lessonList.isEmpty()){
             System.out.println("No lessons in this course.");
@@ -98,8 +98,9 @@ public class CourseProgressController {
 
             switch (sc.nextLine().trim()) {
                 case "1":
-                    System.out.print("Enter Lesson ID: ");
-                    String id = sc.nextLine().trim();
+                    String id = InputUtil.getNonEmptyInput(
+                            sc, "Enter Lesson ID : ", "Lesson ID cannot be empty."
+                    );
 
                     Lesson lesson = lessonList.stream()
                             .filter(l -> l.getId().equals(id))
@@ -110,7 +111,7 @@ public class CourseProgressController {
                         System.out.println("Invalid lesson ID.");
                         continue;
                     }
-                    openLessonMenu(student,course, lesson);
+                    openLessonMenu(student,course, lesson, sc);
                     break;
                 case "0":
                     back = true;
@@ -121,7 +122,7 @@ public class CourseProgressController {
         }
     }
 
-    private void openLessonMenu(Student student,Course course, Lesson lesson){
+    private void openLessonMenu(Student student,Course course, Lesson lesson, Scanner sc){
         System.out.println(lesson.getTitle());
         System.out.println("Content:\n" + lesson.getContent());
 
@@ -137,21 +138,17 @@ public class CourseProgressController {
 
         boolean back = false;
         while(!back){
-            System.out.println("1. Open Resource ");
-            System.out.println("2. Mark as complete");
+            System.out.println("1. Mark as complete");
             System.out.println("0. Back");
 
             System.out.print("Choose:");
             switch (sc.nextLine().trim()) {
                 case "1":
-                    openResource(lesson);
-                    break;
-                case "2":
                     boolean success = studentService.markLessonCompleted(student, course, lesson);
                     if(success){
-                        System.out.println("Completed ✔");
+                        System.out.println("Lesson marked as Completed ✔");
                     } else {
-                        System.out.println("Already completed");
+                        System.out.println("Lesson already completed or unavailable");
                     }
                     break;
                 case "0":
@@ -161,22 +158,7 @@ public class CourseProgressController {
         }
     }
 
-    private void openResource(Lesson lesson){
-        if(lesson.getResourceList().isEmpty()){
-            System.out.println("No resources.");
-            return;
-        }
+    private void openAssignments(Student student, Course course, Scanner sc){
 
-        System.out.print("Enter Resource ID: ");
-        String id = sc.nextLine().trim();
-
-        for(Resource r : lesson.getResourceList()){
-            if(r.getId().equals(id)){
-                studentService.openResource(r.getUrl());
-            }
-        }
-
-        System.out.println("Resource not found.");
     }
-
 }

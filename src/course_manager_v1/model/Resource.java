@@ -8,6 +8,15 @@ public class Resource {
     private ResourceType type;
 
     public Resource(String url, ResourceType type){
+
+        if(url == null || url.isBlank()){
+            throw new IllegalArgumentException("URL cannot be empty");
+        }
+
+        if(type == null){
+            throw new IllegalArgumentException("Resource type cannot be null");
+        }
+
         this.url = url;
         this.type=type;
         this.id = IdGenerator.generateResourceId();
@@ -21,7 +30,4 @@ public class Resource {
         return id;
     }
 
-    public String getUrl() {
-        return url;
-    }
 }

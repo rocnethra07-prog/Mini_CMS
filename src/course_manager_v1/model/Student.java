@@ -1,19 +1,19 @@
 package course_manager_v1.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Student extends User{
 
-    private List<Enrollment> enrollmentList;
+    private final List<Enrollment> enrollmentList = new ArrayList<>();
 
     public Student(String name, String email) {
         super(name, email, Role.STUDENT);
-        this.enrollmentList = new ArrayList<>();
     }
 
     public List<Enrollment> getMyEnrollments(){
-        return enrollmentList;
+        return Collections.unmodifiableList(enrollmentList);
     }
 
     public void addEnrollment(Enrollment enrollment){

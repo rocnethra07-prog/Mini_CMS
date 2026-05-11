@@ -13,6 +13,9 @@ public class UserRepo {
     public User findUserByEmail(String email){
         return userStore.get(email);
     }
+    public boolean isUserExists(String email){
+        return userStore.containsKey(email);
+    }
 
     public void saveUser(User user, String password){
         userStore.put(user.getEmail(), user);

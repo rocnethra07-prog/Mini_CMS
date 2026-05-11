@@ -13,18 +13,13 @@ public class InstructorService {
     private final CourseRepo courseRepo = new CourseRepo();
 
     public List<Course> getMyCourses(Instructor instructor) {
-        return new ArrayList<>(instructor.getMyCreatedCourses());
+        return instructor.getMyCreatedCourses();
     }
 
     public Course createCourse(String title, String description, Set<String> categories, double price, Instructor instructor) {
-
         Course course = new Course(title, description, price, categories, instructor);
         courseRepo.addCourse(course);
         return course;
-    }
-
-    public Course getCourseById(String id) {
-        return courseRepo.findById(id);
     }
 
     public Course getInstructorCourseById(Instructor instructor, String courseId) {

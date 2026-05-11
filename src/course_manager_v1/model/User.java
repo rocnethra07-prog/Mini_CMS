@@ -9,6 +9,17 @@ public  class User {
     private Role role;
 
     public User(String name, String email, Role role){
+        if(name == null || name.isBlank()){
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
+
+        if(email == null || email.isBlank()){
+            throw new IllegalArgumentException("Email cannot be empty");
+        }
+
+        if(role == null){
+            throw new IllegalArgumentException("Role cannot be null");
+        }
         this.email = email;
         this.name = name;
         this.role = role;

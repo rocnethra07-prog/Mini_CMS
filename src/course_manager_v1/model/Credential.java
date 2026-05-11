@@ -1,21 +1,20 @@
 package course_manager_v1.model;
 
 public class Credential {
-    private String passwordHash;
+    private final String passwordHash;
 
     public Credential(String rawPassword){
+        if(rawPassword == null || rawPassword.isBlank()){
+            throw new IllegalArgumentException("Password cannot be empty");
+        }
         this.passwordHash = hash(rawPassword);
     }
 
     public boolean validatePassword(String inputPassword){
-        return passwordHash.equals(hash(inputPassword));
-    }
-
-    public void changePassword(String oldPassword, String newPassword){
-        if(!validatePassword(oldPassword)){
-            throw new IllegalArgumentException("Incorrect old password");
+        if(inputPassword == null){
+            return false;
         }
-        this.passwordHash = hash(newPassword);
+        return passwordHash.equals(hash(inputPassword));
     }
 
     private String hash(String password){

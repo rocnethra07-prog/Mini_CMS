@@ -10,25 +10,23 @@ import java.util.Scanner;
 public class MainClass {
 
     public static void main(String[] args) {
-        AuthController authController = new AuthController();
         Scanner sc = new Scanner(System.in);
+        AuthController authController = new AuthController(sc);
         boolean running = true;
 
-        User user = null ;
-
-        while(running){
+        while (running) {
             System.out.println("\n--- Course Management System ---");
             System.out.println("1. Register");
             System.out.println("2. Log In");
             System.out.println("0. Exit");
             System.out.print("Choose an option: ");
 
-            switch(sc.nextLine().trim()){
+            switch (sc.nextLine().trim()) {
                 case "1":
-                    user = authController.signup();
+                    handleSession(authController.signup(), sc);
                     break;
                 case "2":
-                    user = authController.login();
+                    handleSession(authController.login(), sc);
                     break;
                 case "0":
                     running = false;
@@ -37,11 +35,13 @@ public class MainClass {
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
+        }
+        sc.close();
+    }
 
-            if(user != null){
-                ControllerProvider.getUserController(user).showMenu(user);
-                user = null;
-            }
+    private static void handleSession(User user, Scanner sc) {
+        if (user != null) {
+            ControllerProvider.getUserController(user).showMenu(user, sc);
         }
     }
 }

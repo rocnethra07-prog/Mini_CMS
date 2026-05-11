@@ -1,19 +1,19 @@
 package course_manager_v1.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Instructor extends User {
 
-    private List<Course> myCreatedCourses;
+    private final List<Course> myCreatedCourses = new ArrayList<>();
 
     public Instructor(String name, String email) {
         super(name, email, Role.INSTRUCTOR);
-        this.myCreatedCourses = new ArrayList<>();
     }
 
     public List<Course> getMyCreatedCourses() {
-        return myCreatedCourses;
+        return Collections.unmodifiableList(myCreatedCourses);
     }
 
     public void addCourse(Course course){

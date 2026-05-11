@@ -14,15 +14,6 @@ public class CourseRepo {
         courses.add(course);
     }
 
-    public Course findById(String id) {
-        for (Course c : courses) {
-            if (c.getId().equals(id)) {
-                return c;
-            }
-        }
-        return null;
-    }
-
     public boolean delete(Course course) {
         return courses.remove(course);
     }

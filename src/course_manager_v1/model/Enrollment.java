@@ -3,11 +3,14 @@ package course_manager_v1.model;
 import java.util.Objects;
 
 public class Enrollment {
-    private Course course;
-    private LessonProgress lessonProgress;
-    private AssignmentProgress assignmentProgress;
+    private final Course course;
+    private final LessonProgress lessonProgress = new LessonProgress();
+    private final  AssignmentProgress assignmentProgress = new AssignmentProgress();;
 
     public Enrollment(Course course) {
+        if(course == null){
+            throw new IllegalArgumentException("Course cannot be null");
+        }
         this.course = course;
     }
 

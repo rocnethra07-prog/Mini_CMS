@@ -1,6 +1,5 @@
 package course_manager_v1.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -72,17 +71,8 @@ public class CourseService {
         lesson.addResource(resource);
     }
 
-
     public boolean removeResourceFromLesson(Lesson lesson, String resourceId){
         return lesson.removeResource(resourceId);
-    }
-
-    public Resource getResourceById(Lesson lesson, String resourceId){
-        return lesson.getResourceList()
-                .stream()
-                .filter(r -> r.getId().equals(resourceId))
-                .findFirst()
-                .orElse(null);
     }
 
     public List<Assignment> getAssignments(Course course){

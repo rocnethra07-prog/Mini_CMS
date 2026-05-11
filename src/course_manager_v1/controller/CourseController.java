@@ -3,19 +3,16 @@ package course_manager_v1.controller;
 
 import course_manager_v1.model.*;
 import course_manager_v1.service.CourseService;
-import course_manager_v1.util.ResourceOpener;
+import course_manager_v1.util.InputUtil;
 import course_manager_v1.util.Validator;
 
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class CourseController {
 
-    private final Scanner sc = new Scanner(System.in);
     private final CourseService courseService = new CourseService();
 
-
-    public void showMenu(Course course) {
+    public void showMenu(Course course, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("Managing: " + course.getTitle());
@@ -33,19 +30,19 @@ public class CourseController {
                     viewCourseDetails(course);
                     break;
                 case "2":
-                    updateCourse(course);
+                    updateCourse(course, sc);
                     break;
                 case "3":
-                    boolean isDeleted = deleteCourse(course);
+                    boolean isDeleted = deleteCourse(course,sc);
                     if (isDeleted) {
                         back = true;
                     }
                     break;
                 case "4":
-                    manageLessons(course);
+                    manageLessons(course, sc);
                     break;
                 case "5":
-                    manageAssignments(course);
+                    manageAssignments(course, sc);
                     break;
                 case "0":
                     back = true;
@@ -65,7 +62,7 @@ public class CourseController {
         System.out.println("Categories : " + course.getCategories());
     }
 
-    private void updateCourse(Course course) {
+    private void updateCourse(Course course, Scanner sc) {
 
         System.out.println("Updating :" + course);
 
@@ -148,7 +145,7 @@ public class CourseController {
         }
     }
 
-    private boolean deleteCourse(Course course) {
+    private boolean deleteCourse(Course course, Scanner sc) {
         boolean deleted;
 
         while (true) {
@@ -177,7 +174,7 @@ public class CourseController {
     }
 
 
-    private void manageLessons(Course course) {
+    private void manageLessons(Course course, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n Managing Lessons");
@@ -194,16 +191,16 @@ public class CourseController {
                     listLessons(course);
                     break;
                 case "2":
-                    addLesson(course);
+                    addLesson(course, sc);
                     break;
                 case "3":
-                    editLesson(course);
+                    editLesson(course, sc);
                     break;
                 case "4":
-                    deleteLesson(course);
+                    deleteLesson(course,sc);
                     break;
                 case "5":
-                    manageResourcesMenu(course);
+                    manageResourcesMenu(course, sc);
                     break;
                 case "0":
                     back = true;
@@ -228,27 +225,15 @@ public class CourseController {
         }
     }
 
-    private void addLesson(Course course){
+    private void addLesson(Course course, Scanner sc){
 
-        String title;
-        while(true) {
-            System.out.print("Title: ");
-            title = sc.nextLine().trim();
-            if (Validator.isValidTitle(title)) {
-                break;
-            }
-            System.out.println("Invalid title (min 3 characters) ");
-        }
+        String title = InputUtil.getTitle(
+                sc, "Enter Lesson Title : ", "Title must be at least 3 characters."
+        );
 
-        String content;
-        while(true) {
-            System.out.print("Content: ");
-            content = sc.nextLine().trim();
-            if(!content.isEmpty()){
-                break;
-            }
-            System.out.println("Content cannot be empty.");
-        }
+        String content = InputUtil.getNonEmptyInput(
+                sc, "Enter Lesson Content : ", "Content cannot be empty."
+        );
 
         List<Resource> resources = new ArrayList<>();
 
@@ -312,16 +297,12 @@ public class CourseController {
         System.out.println("Lesson added! ");
     }
 
-    private void deleteLesson(Course course){
+    private void deleteLesson(Course course , Scanner sc){
         listLessons(course);
 
-        System.out.print("Enter Lesson ID to delete: ");
-        String lessonId = sc.nextLine().trim();
-
-        if(lessonId.isEmpty()){
-            System.out.println("Invalid ID.");
-            return;
-        }
+        String lessonId = InputUtil.getNonEmptyInput(
+                sc, "Enter Lesson ID to delete : ", "Lesson ID cannot be empty."
+        );
 
         boolean deleted = courseService.deleteLesson(course, lessonId);
 
@@ -332,7 +313,7 @@ public class CourseController {
         }
     }
 
-    private void editLesson(Course course){
+    private void editLesson(Course course, Scanner sc){
         listLessons(course);
         System.out.print("Enter lesson ID to edit: ");
         String lessonId = sc.nextLine().trim();
@@ -372,11 +353,12 @@ public class CourseController {
         }
     }
 
-    private void manageResourcesMenu(Course course){
+    private void manageResourcesMenu(Course course, Scanner sc){
         listLessons(course);
 
-        System.out.print("Enter lesson ID to manage resources: ");
-        String lessonId = sc.nextLine().trim();
+        String lessonId = InputUtil.getNonEmptyInput(
+                sc, "Enter Lesson ID to manage resources : ", "Lesson ID cannot be empty."
+        );
 
         Lesson lesson = courseService.getLessonById(course, lessonId);
 
@@ -389,9 +371,9 @@ public class CourseController {
         while(!back){
             System.out.println("Manage resources of \"" + lesson.getTitle() + "\" : ");
             System.out.println("1. View resources");
-            System.out.println("2. Open Resource");
-            System.out.println("3. Add resource ");
-            System.out.println("4. Remove resource");
+//            System.out.println(". Open Resource");
+            System.out.println("2. Add resource ");
+            System.out.println("3. Remove resource");
             System.out.println("0. Back");
 
             System.out.print("Choose: ");
@@ -400,13 +382,10 @@ public class CourseController {
                     viewResources(lesson);
                     break;
                 case "2":
-                    openResource(lesson);
+                    addResource(lesson, sc);
                     break;
                 case "3":
-                    addResource(lesson);
-                    break;
-                case "4":
-                    deleteResource(lesson);
+                    deleteResource(lesson, sc);
                     break;
                 case "0":
                     back = true;
@@ -430,7 +409,7 @@ public class CourseController {
         }
     }
 
-    private void addResource(Lesson lesson) {
+    private void addResource(Lesson lesson, Scanner sc) {
 
         ResourceType type = null;
         while (true) {
@@ -488,15 +467,11 @@ public class CourseController {
         System.out.println("Resource added successfully.");
     }
 
-    private void deleteResource(Lesson lesson){
+    private void deleteResource(Lesson lesson, Scanner sc){
         viewResources(lesson);
-        System.out.print("Enter resource ID to delete: ");
-        String id = sc.nextLine().trim();
-
-        if(id.isEmpty()){
-            System.out.println("Invalid ID.");
-            return;
-        }
+        String id = InputUtil.getNonEmptyInput(
+                sc, "Enter Resource ID to delete : ", "Resource ID cannot be empty."
+        );
 
         boolean removed = courseService.removeResourceFromLesson(lesson, id);
 
@@ -507,33 +482,7 @@ public class CourseController {
         }
     }
 
-    private void openResource(Lesson lesson){
-        viewResources(lesson);
-        System.out.print("Enter resource ID to delete: ");
-        String id = sc.nextLine().trim();
-
-        if(id.isEmpty()){
-            System.out.println("Invalid ID.");
-            return;
-        }
-
-        Resource resource = courseService.getResourceById(lesson, id);
-        if(resource == null){
-            System.out.println("Resource not found.");
-            return;
-        }
-
-        String url = resource.getUrl();
-        if(!Validator.isValidURL(url)){
-            System.out.println("Stored URL is invalid.");
-            return;
-        }
-
-        ResourceOpener.openLink(url);
-    }
-
-
-    private void manageAssignments(Course course){
+    private void manageAssignments(Course course, Scanner sc){
         System.out.println("\nManaging Assignments of " + course.getTitle());
         boolean back = false;
 
@@ -550,10 +499,10 @@ public class CourseController {
                     listAssignments(course);
                     break;
                 case "2":
-                    addAssignment(course);
+                    addAssignment(course, sc);
                     break;
                 case "3":
-                    removeAssignment(course);
+                    removeAssignment(course, sc);
                     break;
                 case "0":
                     back = true;
@@ -578,7 +527,7 @@ public class CourseController {
     }
 
 
-    private void addAssignment(Course course){
+    private void addAssignment(Course course, Scanner sc){
         String title;
         while(true){
             System.out.print("Enter quiz title: ");
@@ -591,7 +540,6 @@ public class CourseController {
         }
 
         Assignment assignment = courseService.addAssignment(course, title);
-
 
         while(true){
 
@@ -656,7 +604,6 @@ public class CourseController {
                         System.out.println("Duplicate option not allowed");
                         continue;
                     }
-
                     optionsList.add(option);
                     break;
                 }
@@ -719,24 +666,21 @@ public class CourseController {
         System.out.println("Assignment created successfully ");
     }
 
-    private void removeAssignment(Course course){
+    private void removeAssignment(Course course, Scanner sc){
         listAssignments(course);
 
-        System.out.print("Enter Assignment ID to delete: ");
-        String id = sc.nextLine().trim();
 
-        if(id.isEmpty()){
-            System.out.println("Invalid ID.");
-            return;
-        }
+        String id = InputUtil.getNonEmptyInput(
+                sc, "Enter Assignment ID to delete : ", "Assignment ID cannot be empty."
+        );
 
         boolean removed = courseService.removeAssignment(course, id);
 
         if(removed){
             System.out.println("Assignment deleted successfully");
-        } else {
+        }
+        else {
             System.out.println("Assignment not found");
         }
     }
-
 }

@@ -15,17 +15,4 @@ public class LessonProgress {
         return completedLessonIds.contains(lesson.getId());
     }
 
-    public int getCompletedCount(){
-        return completedLessonIds.size();
-    }
-
-    public double getCompletionPercentage(Course course){
-        int total = course.getLessons().size();
-        if(total == 0) return 0;
-        return (completedLessonIds.size() * 100.0) / total;
-    }
-
-    public Set<String> getCompletedLessonIds(){
-        return Collections.unmodifiableSet(completedLessonIds);
-    }
 }

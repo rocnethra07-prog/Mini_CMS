@@ -8,8 +8,12 @@ import course_manager_v1.util.Validator;
 import java.util.Scanner;
 
 public class AuthController {
-    private final Scanner sc = new Scanner(System.in);
+    private final Scanner sc;
     private final AuthService authService = new AuthService();
+
+    public AuthController(Scanner sc){
+        this.sc = sc;
+    }
 
     public User signup() {
         String name;
@@ -67,10 +71,11 @@ public class AuthController {
         }
 
         User user = authService.signup(name, email,password, role);
-
-        System.out.println("Signup successful! Welcome "+ user.getName());
-        return user;
-
+        if(user != null) {
+            System.out.println("Signup successful! Welcome " + user.getName());
+            return user;
+        }
+        return null;
     }
 
     public User login() {

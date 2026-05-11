@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.Scanner;
 import course_manager_v1.service.StudentService;
 import course_manager_v1.model.Course;
+import course_manager_v1.util.InputUtil;
 
 public class StudentController implements UserController<Student>{
 
-    private final Scanner sc = new Scanner(System.in);
-    private final StudentService studentService = new StudentService();
-
-    public void showMenu(Student student) {
+    private final StudentService studentService = new StudentService();;
+    public void showMenu(Student student, Scanner sc) {
         boolean back = false;
         while(!back){
             System.out.println("\n--- Student Menu --- ");
@@ -29,13 +28,13 @@ public class StudentController implements UserController<Student>{
                     browseAllCourses(student);
                     break;
                 case "2":
-                    searchCourses(student);
+                    searchCourses(student, sc);
                     break;
                 case "3":
-                    enrollCourse(student);
+                    enrollCourse(student, sc);
                     break;
                 case "4":
-                    new CourseProgressController().start(student);
+                    new CourseProgressController().start(student, sc);
                     break;
                 case "5":
                     viewEnrolledCourses(student);
@@ -66,7 +65,7 @@ public class StudentController implements UserController<Student>{
         System.out.println(studentService.formatCourseWithStatus(student, course));
     }
 
-    private void searchCourses(Student student){
+    private void searchCourses(Student student, Scanner sc){
         System.out.println("\n--- Search Courses ---");
         System.out.println("1. Search by Category");
         System.out.println("2. Search by Price");
@@ -76,13 +75,13 @@ public class StudentController implements UserController<Student>{
         String choice = sc.nextLine().trim();
         switch (choice) {
             case "1":
-                searchByCategory(student);
+                searchByCategory(student, sc);
                 break;
             case "2":
-                searchByMaxPrice(student);
+                searchByMaxPrice(student, sc);
                 break;
             case "3":
-                searchByCategoryAndPrice(student);
+                searchByCategoryAndPrice(student, sc);
                 break;
             case "0":
                 break;
@@ -91,75 +90,41 @@ public class StudentController implements UserController<Student>{
         }
     }
 
-    private void searchByCategory(Student student){
-        System.out.print("Enter category to search: ");
-        String category = sc.nextLine().trim();
+    private void searchByCategory(Student student, Scanner sc){
 
-        if (category.isEmpty()) {
-            System.out.println("Category cannot be empty.");
-            return;
-        }
+        String category = InputUtil.getNonEmptyInput(
+                sc, "Enter category to search : ", "Category cannot be empty.");
+
         List<Course> courseList = studentService.searchByCategory(category);
         printSearchResult(student, courseList, "Category: "+ category);
     }
 
-    private void searchByMaxPrice(Student student){
-        double price;
+    private void searchByMaxPrice(Student student, Scanner sc){
 
-        while(true){
-            System.out.print("Enter max price (0 for free courses): ");
-            String input = sc.nextLine().trim();
-
-            try{
-                price = Double.parseDouble(input);
-                if(price >= 0){
-                    break;
-                }
-            }
-            catch (NumberFormatException e) {
-
-            }
-            System.out.println("Enter a valid price. ");
-
-        }
+        double price = InputUtil.getPrice(
+                sc, "Enter max price (0 for free courses) : ", "Enter a valid price.");
 
         List<Course> courseList = studentService.searchByMaxPrice(price);
-
         String label = price == 0 ? "Free Courses" : "Max Price: " + price;
 
         printSearchResult(student,courseList,label);
     }
 
-    private void searchByCategoryAndPrice(Student student){
-        System.out.print("Enter category: ");
-        String category = sc.nextLine().trim();
+    private void searchByCategoryAndPrice(Student student, Scanner sc){
 
-        if(category.isEmpty()){
-            System.out.println("Category cannot be empty.");
-            return;
-        }
+        String category = InputUtil.getNonEmptyInput(
+                sc, "Enter category : ", "Category cannot be empty.");
 
-        double maxPrice;
-
-        while(true){
-            System.out.print("Enter max price (0 for free) : ");
-            String input = sc.nextLine().trim();
-
-            try {
-                maxPrice = Double.parseDouble(input);
-                if(maxPrice >= 0){
-                    break;
-                }
-            }
-            catch (NumberFormatException e) {
-                System.out.println("Please enter a number");
-            }
-            System.out.println("Enter a valid price (0 or above).");
-        }
+        double maxPrice = InputUtil.getPrice(
+                sc, "Enter max price (0 for free) : ", "Enter a valid price (0 or above).");
 
         List<Course> courseList = studentService.searchByCategoryAndMaxPrice(category, maxPrice);
-        String label = "Category: " + category + (maxPrice == 0 ? " | Free only" : " | Max price: $" + String.format("%.2f", maxPrice));
+        String label = "Category: " + category +
+                (maxPrice == 0
+                        ? " | Free only"
+                        : " | Max price: $" + String.format("%.2f", maxPrice));
         printSearchResult(student, courseList, label);
+
     }
 
     private void printSearchResult(Student student, List<Course> results, String label) {
@@ -191,7 +156,7 @@ public class StudentController implements UserController<Student>{
         }
     }
 
-    private void enrollCourse(Student student){
+    private void enrollCourse(Student student, Scanner sc){
         System.out.println("\nEnroll in a course---");
 
         List<Course> courses = studentService.getEnrollableCourses(student);
@@ -205,8 +170,9 @@ public class StudentController implements UserController<Student>{
             System.out.println(course);
         }
 
-        System.out.print("\nEnter Course ID: ");
-        String courseId = sc.nextLine().trim();
+        String courseId = InputUtil.getNonEmptyInput(
+                sc, "\nEnter Course ID : ", "Course ID cannot be empty."
+        );
 
         Course course = studentService.findCourseFromList(courses, courseId);
 
@@ -224,5 +190,4 @@ public class StudentController implements UserController<Student>{
             System.out.println("You are already enrolled in this course.");
         }
     }
-
 }

@@ -11,18 +11,23 @@ public class Course {
     private double price;
     private Instructor instructor;
     private Set<String> categories;
-    private List<Lesson> lessons;
-    private List<Assignment> assignments;
+    private final List<Lesson> lessons = new ArrayList<>();
+    private final List<Assignment> assignments = new ArrayList<>();
 
     public Course(String title, String description, double price, Set<String> categories, Instructor instructor){
+        if(instructor == null){
+            throw new IllegalArgumentException("Instructor cannot be null");
+        }
+
+        if(title == null || title.isBlank()){
+            throw new IllegalArgumentException("Title cannot be blank");
+        }
         this.title = title;
         this.description = description;
         this.price = price;
-        this.categories = categories;
+        this.categories = new HashSet<>(categories);
         this.id = IdGenerator.generateCourseId();
         instructor.addCourse(this);
-        this.lessons = new ArrayList<>();
-        this.assignments = new ArrayList<>();
     }
 
     public String getId() {
@@ -62,16 +67,16 @@ public class Course {
     }
 
     public Set<String> getCategories() {
-        return categories;
+        return Collections.unmodifiableSet(categories);
     }
 
     public void setCategories(Set<String> categories) {
-        this.categories = categories;
+        this.categories = new HashSet<>(categories);
     }
 
     public String toString() {
         return "[ ID: " + id + " | Title: " + title + " | Price: "
-                + (isFree() ? "Free" : "$" + String.format("%.2f", price)) ;
+                + (isFree() ? "Free" : "$" + String.format("%.2f", price)) + " ]" ;
     }
 
     public boolean isFree(){
@@ -79,7 +84,7 @@ public class Course {
     }
 
     public List<Lesson> getLessons() {
-        return new ArrayList<>(lessons);
+        return Collections.unmodifiableList(lessons);
     }
 
     public void addLesson(Lesson lesson){
@@ -91,11 +96,15 @@ public class Course {
     }
 
     public List<Assignment> getAssignments(){
-        return new ArrayList<>(assignments);
+        return Collections.unmodifiableList(assignments);
     }
 
     public void addAssignment(Assignment assignment){
         this.assignments.add(assignment);
+    }
+
+    public boolean removeAssignment(Assignment assignment) {
+        return this.assignments.remove(assignment);
     }
 
     @Override
@@ -109,7 +118,4 @@ public class Course {
         return Objects.hashCode(id);
     }
 
-    public boolean removeAssignment(Assignment assignment) {
-        return this.assignments.remove(assignment);
-    }
 }

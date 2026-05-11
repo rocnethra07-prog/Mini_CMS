@@ -1,6 +1,7 @@
 package course_manager_v1.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import course_manager_v1.util.IdGenerator;
 
@@ -11,6 +12,13 @@ public class Lesson {
     private List<Resource> resources;
 
     public Lesson(String title, String content, List<Resource> resources ){
+
+        if(title == null || title.isBlank()){
+            throw new IllegalArgumentException("Title cannot be empty");
+        }
+        if(content == null || content.isBlank()){
+            throw new IllegalArgumentException("Content cannot be empty");
+        }
         this.title = title;
         this.content = content;
         this.id = IdGenerator.generateLessonId();
@@ -34,7 +42,7 @@ public class Lesson {
     }
 
     public List<Resource> getResourceList() {
-        return new ArrayList<>(resources);
+        return Collections.unmodifiableList(resources);
     }
 
     public void addResource(Resource r){

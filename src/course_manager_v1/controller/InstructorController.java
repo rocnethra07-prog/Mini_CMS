@@ -3,7 +3,7 @@ package course_manager_v1.controller;
 import course_manager_v1.model.Course;
 import course_manager_v1.model.Instructor;
 import course_manager_v1.service.InstructorService;
-import course_manager_v1.util.Validator;
+import course_manager_v1.util.InputUtil;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,10 +12,9 @@ import java.util.Set;
 
 public class InstructorController implements UserController<Instructor> {
 
-    private final Scanner sc = new Scanner(System.in);
     private final InstructorService instructorService = new InstructorService();
 
-    public void showMenu(Instructor instructor) {
+    public void showMenu(Instructor instructor, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n--- Instructor Menu ---");
@@ -29,10 +28,10 @@ public class InstructorController implements UserController<Instructor> {
                     viewMyCourses(instructor);
                     break;
                 case "2":
-                    manageCourse(instructor);
+                    manageCourse(instructor, sc);
                     break;
                 case "3":
-                    createCourse(instructor);
+                    createCourse(instructor, sc);
                     break;
                 case "0":
                     back = true;
@@ -59,20 +58,16 @@ public class InstructorController implements UserController<Instructor> {
         }
     }
 
-    private void createCourse(Instructor instructor) {
-        System.out.println("\n Create Course");
-        String title;
+    private void createCourse(Instructor instructor, Scanner sc) {
+        System.out.println("\n--- Create Course ---");
 
-        while (true) {
-            System.out.print("Title : ");
-            title = sc.nextLine().trim();
-            if (Validator.isValidTitle(title)) {
-                break;
-            }
-            System.out.println("Title must be at least 3 characters long.");
-        }
+        String title = InputUtil.getTitle(
+                sc,
+                "Enter Course Title : ",
+                "Title must be at least 3 characters."
+        );
 
-        System.out.print("Description : ");
+        System.out.print("Enter Course Description : ");
         String description = sc.nextLine().trim();
 
         System.out.print("Categories (comma separated): ");
@@ -86,22 +81,18 @@ public class InstructorController implements UserController<Instructor> {
             }
         }
 
-        double price;
-        while (true) {
-            System.out.print("Price (0 for free): ");
-            String priceStr = sc.nextLine().trim();
-            if (Validator.isValidPrice(priceStr)) {
-                price = Double.parseDouble(priceStr);
-                break;
-            }
-            System.out.println("Enter a valid price (0 or above) ");
-        }
+        double price = InputUtil.getPrice(
+                sc,
+                "Enter Price (0 for free) : ",
+                "Enter a valid price (0 or above)."
+        );
+
 
         Course course = instructorService.createCourse(title, description, categories, price, instructor);
         System.out.println("Course successfully created : " + course);
     }
 
-    private void manageCourse(Instructor instructor) {
+    private void manageCourse(Instructor instructor, Scanner sc) {
         List<Course> myCourses = instructorService.getMyCourses(instructor);
         if (myCourses.isEmpty()) {
             System.out.println("You have not created any courses yet.");
@@ -112,14 +103,10 @@ public class InstructorController implements UserController<Instructor> {
             System.out.println(c);
         }
 
-        System.out.println("\nManage Course");
-        System.out.print("Enter Course ID to manage: ");
-        String courseId = sc.nextLine().trim();
+        System.out.println("\n--- Manage Course---");
 
-        if(courseId.isEmpty()){
-            System.out.println("Invalid ID.");
-            return;
-        }
+        String courseId = InputUtil.getNonEmptyInput(sc,"Enter Course ID to manage : ","Course ID cannot be empty");
+
         Course course = instructorService.getInstructorCourseById(instructor, courseId);
 
         if (course == null) {
@@ -128,6 +115,6 @@ public class InstructorController implements UserController<Instructor> {
         }
 
         CourseController courseController = new CourseController();
-        courseController.showMenu(course);
+        courseController.showMenu(course, sc);
     }
 }

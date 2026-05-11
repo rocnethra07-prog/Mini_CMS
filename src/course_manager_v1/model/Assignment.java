@@ -1,20 +1,22 @@
 package course_manager_v1.model;
 
-
 import course_manager_v1.util.IdGenerator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //assignment or quiz
 public class Assignment {
     private String id;
     private String title;
-    private List<Question> questionsList ;
+    private final List<Question> questionsList = new ArrayList<>() ;
 
     public Assignment(String title){
+        if(title == null || title.isBlank()){
+            throw new IllegalArgumentException("Title cannot be empty");
+        }
         this.title = title;
-        this.questionsList = new ArrayList<>();
         this.id = IdGenerator.generateAssignmentId();
     }
 
@@ -27,9 +29,11 @@ public class Assignment {
     }
 
     public List<Question> getQuestionsList(){
-        return new ArrayList<>(questionsList);
+        return Collections.unmodifiableList(questionsList);
     }
+
     public String toString(){
         return "[ ID : "+ id + " | Title : " + this.title + " ]" ;
     }
+
 }

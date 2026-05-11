@@ -5,10 +5,6 @@ import course_manager_v1.model.Enrollment;
 import course_manager_v1.model.Lesson;
 import course_manager_v1.repository.CourseRepo;
 import course_manager_v1.model.Student;
-import course_manager_v1.util.ResourceOpener;
-
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class StudentService {
@@ -88,12 +84,4 @@ public class StudentService {
         return enrollment.getLessonProgress().markCompleted(lesson);
     }
 
-    public void openResource(String url){
-        try {
-            ResourceOpener.openLink(url);
-        }
-        catch (Exception e){
-            System.out.println("Failed to open resource.");
-        }
-    }
 }

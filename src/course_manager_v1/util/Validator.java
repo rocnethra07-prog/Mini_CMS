@@ -74,7 +74,7 @@ public class Validator {
     public static boolean isValidImage(String url){
         if(!isValidURL(url)) return false;
 
-        return url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith("png") || url.endsWith(".webp") || url.endsWith(".gif");
+        return url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".webp") || url.endsWith(".gif");
     }
 
 
