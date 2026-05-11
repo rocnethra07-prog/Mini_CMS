@@ -16,9 +16,15 @@ public class Student extends User{
         return Collections.unmodifiableList(enrollmentList);
     }
 
-    public void addEnrollment(Enrollment enrollment){
+    public void addEnrollment(Course course){
+        Enrollment enrollment = new Enrollment(course);
         if(!this.enrollmentList.contains(enrollment)){
             this.enrollmentList.add(enrollment);
+            course.addEnrolledStudent(this);
         }
     }
+    public void removeEnrollment(Course course) {
+        enrollmentList.removeIf(e -> e.getCourse().equals(course));
+    }
+
 }

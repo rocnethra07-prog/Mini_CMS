@@ -1,5 +1,6 @@
 package course_manager_v1.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,9 @@ public class CourseService {
         if( course.getInstructor() == null || !course.getInstructor().equals(instructor)){
             return false;
         }
+        for (Student student : new ArrayList<>(course.getEnrolledStudents())) {
+            student.removeEnrollment(course);
+        }
         instructor.removeCourse(course);
         return courseRepo.delete(course);
     }
@@ -39,6 +43,15 @@ public class CourseService {
 
         if(lesson == null) return false;
 
+        for (Student student : course.getEnrolledStudents()) {
+            Enrollment enrollment = student.getMyEnrollments().stream()
+                    .filter(e -> e.getCourse().equals(course))
+                    .findFirst()
+                    .orElse(null);
+            if (enrollment != null) {
+                enrollment.getLessonProgress().removeLessonProgress(lessonId);
+            }
+        }
         course.deleteLesson(lesson);
         return true;
     }

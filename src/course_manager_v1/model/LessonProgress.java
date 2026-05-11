@@ -15,4 +15,7 @@ public class LessonProgress {
         return completedLessonIds.contains(lesson.getId());
     }
 
+    public void removeLessonProgress(String lessonId) {
+        completedLessonIds.remove(lessonId);
+    }
 }

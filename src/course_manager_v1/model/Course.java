@@ -11,6 +11,7 @@ public class Course {
     private double price;
     private Instructor instructor;
     private Set<String> categories;
+    private final List<Student> enrolledStudents = new ArrayList<>();
     private final List<Lesson> lessons = new ArrayList<>();
     private final List<Assignment> assignments = new ArrayList<>();
 
@@ -97,6 +98,20 @@ public class Course {
 
     public List<Assignment> getAssignments(){
         return Collections.unmodifiableList(assignments);
+    }
+
+    public List<Student> getEnrolledStudents() {
+        return Collections.unmodifiableList(enrolledStudents);
+    }
+
+    public void addEnrolledStudent(Student student) {
+        if (!enrolledStudents.contains(student)) {
+            enrolledStudents.add(student);
+        }
+    }
+
+    public void removeEnrolledStudent(Student student) {
+        enrolledStudents.remove(student);
     }
 
     public void addAssignment(Assignment assignment){

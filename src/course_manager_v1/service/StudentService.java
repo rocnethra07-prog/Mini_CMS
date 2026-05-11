@@ -52,7 +52,7 @@ public class StudentService {
         if(isEnrolled(student,course)){
             return false;
         }
-        student.addEnrollment(new Enrollment(course));
+        student.addEnrollment(course);
         return true;
     }
 
